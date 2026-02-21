@@ -42,7 +42,8 @@
         "peaceful": "শান্তিপূর্ণ",
         "struggling": "কষ্টে আছি",
         "weeklyStreak": "সাপ্তাহিক ধারা",
-        "quickAdd": "দ্রুত যোগ"
+        "quickAdd": "দ্রুত যোগ",
+        "loading": "ড্যাশবোর্ড লোড হচ্ছে..."
     },
     "planner": {
         "title": "দৈনিক পরিকল্পনা",
@@ -73,7 +74,8 @@
         "recitationStreak": "তেলাওয়াতের ধারা",
         "days": "দিন",
         "searchSurah": "সূরা খুঁজুন...",
-        "addNotes": "নোট যোগ করুন..."
+        "addNotes": "নোট যোগ করুন...",
+        "loading": "কুরআন লোড হচ্ছে..."
     },
     "prayers": {
         "title": "নামাজ ট্র্যাকার",
@@ -90,7 +92,8 @@
         "monthlyView": "মাসিক দৃশ্য",
         "qibla": "কিবলার দিক",
         "allComplete": "আলহামদুলিল্লাহ! সব নামাজ সম্পন্ন!",
-        "consistency": "নামাজের ধারাবাহিকতা"
+        "consistency": "নামাজের ধারাবাহিকতা",
+        "loading": "নামাজ লোড হচ্ছে..."
     },
     "duas": {
         "title": "দুআ ও যিকর",
@@ -110,7 +113,8 @@
         "favorites": "প্রিয়",
         "subhanallah": "সুবহানআল্লাহ",
         "alhamdulillah": "আলহামদুলিল্লাহ",
-        "allahuakbar": "আল্লাহু আকবার"
+        "allahuakbar": "আল্লাহু আকবার",
+        "loading": "যিকর লোড হচ্ছে..."
     },
     "goals": {
         "title": "লক্ষ্য ও প্রতিফলন",
@@ -122,7 +126,8 @@
         "streak": "ধারা",
         "ramadanSummary": "রমজান সারাংশ",
         "daysCompleted": "সম্পন্ন দিন",
-        "goalsAchieved": "অর্জিত লক্ষ্য"
+        "goalsAchieved": "অর্জিত লক্ষ্য",
+        "loading": "লক্ষ্য লোড হচ্ছে..."
     },
     "profile": {
         "title": "প্রোফাইল",
@@ -142,6 +147,7 @@
         "language": "ভাষা",
         "notifications": "নোটিফিকেশন",
         "privacy": "গোপনীয়তা ও নিরাপত্তা",
-        "help": "সাহায্য ও সমর্থন"
+        "help": "সাহায্য ও সমর্থন",
+        "loading": "প্রোফাইল লোড হচ্ছে..."
     }
 }

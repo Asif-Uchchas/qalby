@@ -42,7 +42,8 @@
     "peaceful": "Peaceful",
     "struggling": "Struggling",
     "weeklyStreak": "Weekly Streak",
-    "quickAdd": "Quick Add"
+    "quickAdd": "Quick Add",
+    "loading": "Loading dashboard..."
   },
   "planner": {
     "title": "Daily Planner",
@@ -76,7 +77,8 @@
     "recitationStreak": "Recitation Streak",
     "days": "days",
     "searchSurah": "Search Surah...",
-    "addNotes": "Add notes..."
+    "addNotes": "Add notes...",
+    "loading": "Loading Quran data..."
   },
   "prayers": {
     "title": "Prayer Tracker",
@@ -93,7 +95,8 @@
     "monthlyView": "Monthly View",
     "qibla": "Qibla Direction",
     "allComplete": "Alhamdulillah! All prayers completed!",
-    "consistency": "Prayer Consistency"
+    "consistency": "Prayer Consistency",
+    "loading": "Loading prayers..."
   },
   "duas": {
     "title": "Dua & Dhikr",
@@ -113,7 +116,8 @@
     "favorites": "Favorites",
     "subhanallah": "SubhanAllah",
     "alhamdulillah": "Alhamdulillah",
-    "allahuakbar": "Allahu Akbar"
+    "allahuakbar": "Allahu Akbar",
+    "loading": "Loading dhikr..."
   },
   "goals": {
     "title": "Goals & Reflection",
@@ -125,7 +129,8 @@
     "streak": "Streak",
     "ramadanSummary": "Ramadan Summary",
     "daysCompleted": "Days Completed",
-    "goalsAchieved": "Goals Achieved"
+    "goalsAchieved": "Goals Achieved",
+    "loading": "Loading goals..."
   },
   "profile": {
     "title": "Profile",
@@ -145,7 +150,8 @@
     "language": "Language",
     "notifications": "Notifications",
     "privacy": "Privacy & Security",
-    "help": "Help & Support"
+    "help": "Help & Support",
+    "loading": "Loading profile..."
   },
   "auth": {
     "welcomeBack": "Welcome Back",

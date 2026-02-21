@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+import { QalbyLogo } from '@/components/QalbyLogo';
 
 export default function LoginPage() {
     const t = useTranslations('auth');
@@ -109,8 +110,8 @@ export default function LoginPage() {
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity" />
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl" />
-                                    <div className="relative z-10 p-3 rounded-xl bg-white/10 backdrop-blur-sm">
-                                        <LogIn size={28} className="text-white" />
+                                    <div className="relative z-10">
+                                        <QalbyLogo size={50} />
                                     </div>
                                 </motion.div>
 

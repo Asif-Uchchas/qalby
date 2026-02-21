@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
+import GoldenParticleBurst from '@/components/GoldenParticleBurst';
 import { Search, Heart, RotateCcw } from 'lucide-react';
 
 interface Dua {
@@ -231,6 +232,7 @@ function DhikrCounter({
     const [count, setCount] = useState(0);
     const [target, setTarget] = useState(33);
     const [activeTypeIndex, setActiveTypeIndex] = useState(0);
+    const [showCelebration, setShowCelebration] = useState(false);
 
     // If activeDuaId is null, we are in "Tasbih" mode using dhikrTypes
     // If activeDuaId is present, we are in "Selected Dua" mode
@@ -270,6 +272,10 @@ function DhikrCounter({
         const newCount = count + 1;
         setCount(newCount);
 
+        if (newCount === target) {
+            setShowCelebration(true);
+        }
+
         try {
             await fetch('/api/dhikr', {
                 method: 'POST',
@@ -298,6 +304,11 @@ function DhikrCounter({
 
     return (
         <GlassCard elevated hover={false}>
+            <GoldenParticleBurst
+                show={showCelebration}
+                message={count >= 99 ? "MashAllah!" : "Alhamdulillah!"}
+                onComplete={() => setShowCelebration(false)}
+            />
             <div className="flex justify-between items-center mb-4">
                 <p className="text-xs font-semibold text-text-muted uppercase tracking-widest">
                     {activeDuaId ? t('selectedDuaCounter') : t('dhikrCounter')}

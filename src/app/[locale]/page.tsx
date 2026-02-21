@@ -11,6 +11,8 @@ import CompletionRings from '@/components/dashboard/CompletionRings';
 import MoodLogger from '@/components/dashboard/MoodLogger';
 import StreakHeatmap from '@/components/dashboard/StreakHeatmap';
 import QuickAddFAB from '@/components/dashboard/QuickAddFAB';
+import GiftGreeting from '@/components/GiftGreeting';
+import { QalbyLogo } from '@/components/QalbyLogo';
 
 interface CompletionRing {
     label: string;
@@ -123,15 +125,23 @@ export default function DashboardPage() {
 
     return (
         <PageTransition>
+            <GiftGreeting />
             <div className="max-w-7xl mx-auto p-4 md:p-8 w-full min-h-screen">
                 {/* Header */}
-                <div className="mb-10 text-center md:text-left">
-                    <h1 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-2">
-                        {t('greeting')} 👋
-                    </h1>
-                    <p className="text-text-muted text-lg md:text-xl">
-                        Day {data?.ramadanDay || 3} of Ramadan
-                    </p>
+                <div className="mb-10 text-center md:text-left flex flex-col md:flex-row items-center gap-6">
+                    <div className="logo-glow animate-float">
+                        <QalbyLogo size={80} />
+                    </div>
+                    <div>
+                        <h1 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-2">
+                            {t('greeting')} 👋
+                        </h1>
+                        <p className="text-text-muted text-lg md:text-xl flex items-center justify-center md:justify-start gap-2">
+                            <span>Day {data?.ramadanDay || 3} of Ramadan</span>
+                            <span className="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+                            <span className="text-accent-400 font-semibold tracking-wider uppercase text-sm">Qalby Premium</span>
+                        </p>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
