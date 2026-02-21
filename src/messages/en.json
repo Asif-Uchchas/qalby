@@ -23,7 +23,8 @@
     "prayers": "Prayers",
     "duas": "Duas",
     "goals": "Goals",
-    "more": "More"
+    "more": "More",
+    "profile": "Profile"
   },
   "dashboard": {
     "title": "Ramadan Dashboard",
@@ -122,5 +123,38 @@
     "ramadanSummary": "Ramadan Summary",
     "daysCompleted": "Days Completed",
     "goalsAchieved": "Goals Achieved"
+  },
+  "profile": {
+    "title": "Profile",
+    "account": "Account",
+    "appearance": "Appearance",
+    "settings": "Settings",
+    "guest": "Guest User",
+    "userName": "Ramadan User",
+    "userEmail": "user@example.com",
+    "loginPrompt": "Login to sync your data",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "theme": "Theme",
+    "darkMode": "Dark",
+    "lightMode": "Light",
+    "language": "Language",
+    "notifications": "Notifications",
+    "privacy": "Privacy & Security",
+    "help": "Help & Support"
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "subtitle": "Continue your spiritual journey with Qalby",
+    "signInWithGoogle": "Sign in with Google",
+    "email": "Email Address",
+    "password": "Password",
+    "name": "Full Name",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "termsDisclaimer": "By signing in, you agree to our spiritual commitment and privacy policy."
   }
 }

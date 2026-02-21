@@ -10,6 +10,7 @@ import {
     BookOpen,
     Moon,
     Heart,
+    User,
 } from 'lucide-react';
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
     { id: 'quran', href: '/quran', icon: BookOpen },
     { id: 'prayers', href: '/prayers', icon: Moon },
     { id: 'duas', href: '/duas', icon: Heart },
+    { id: 'profile', href: '/profile', icon: User },
 ];
 
 export default function BottomNav() {

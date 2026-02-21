@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
-import LanguageToggle from '@/components/LanguageToggle';
 import { Plus, GripVertical, Check, Clock } from 'lucide-react';
 
 type TaskCategory = 'worship' | 'quran' | 'rest' | 'work' | 'family';
@@ -19,11 +18,11 @@ interface PlannerTask {
 }
 
 const categoryConfig: Record<TaskCategory, { emoji: string; color: string }> = {
-    worship: { emoji: '🟡', color: '#F4A830' },
-    quran: { emoji: '🟢', color: '#22C55E' },
-    rest: { emoji: '🔵', color: '#3B82F6' },
-    work: { emoji: '⚪', color: '#9CA3AF' },
-    family: { emoji: '🟣', color: '#A78BFA' },
+    worship: { emoji: '✨', color: 'var(--warm-500)' },
+    quran: { emoji: '📖', color: 'var(--secondary-500)' },
+    rest: { emoji: '🌙', color: 'var(--primary-500)' },
+    work: { emoji: '💼', color: 'var(--text-muted)' },
+    family: { emoji: '🏠', color: 'var(--accent-500)' },
 };
 
 const demoTasks: PlannerTask[] = [
@@ -68,8 +67,8 @@ function TaskCard({
                     gap: '12px',
                     padding: '14px 16px',
                     borderRadius: 'var(--radius-md)',
-                    background: task.completed ? 'var(--glow-gold)' : 'var(--bg-card)',
-                    border: `1px solid ${task.completed ? 'var(--accent-gold)' : 'var(--glass-border)'}`,
+                    background: task.completed ? 'var(--glow-primary)' : 'var(--bg-card)',
+                    border: `1px solid ${task.completed ? 'var(--primary-500)' : 'var(--glass-border)'}`,
                     cursor: 'pointer',
                     position: 'relative',
                     overflow: 'hidden',
@@ -112,7 +111,7 @@ function TaskCard({
                         style={{
                             fontSize: '0.9rem',
                             fontWeight: 500,
-                            color: task.completed ? 'var(--accent-gold)' : 'var(--text-primary)',
+                            color: task.completed ? 'var(--primary-400)' : 'var(--text-primary)',
                             textDecoration: task.completed ? 'line-through' : 'none',
                             margin: 0,
                             whiteSpace: 'nowrap',
@@ -144,10 +143,10 @@ function TaskCard({
                     <motion.div
                         animate={{
                             background: task.completed
-                                ? 'var(--accent-gold)'
+                                ? 'var(--primary-500)'
                                 : 'transparent',
                             borderColor: task.completed
-                                ? 'var(--accent-gold)'
+                                ? 'var(--primary-500)'
                                 : 'var(--text-muted)',
                         }}
                         style={{
@@ -204,7 +203,6 @@ export default function PlannerPage() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '16px',
-                        paddingTop: '8px',
                     }}
                 >
                     <h1
@@ -218,7 +216,6 @@ export default function PlannerPage() {
                     >
                         {t('title')}
                     </h1>
-                    <LanguageToggle />
                 </motion.div>
 
                 <motion.div
@@ -257,9 +254,9 @@ export default function PlannerPage() {
                                         fontWeight: 600,
                                         background:
                                             view === v
-                                                ? 'linear-gradient(135deg, var(--accent-gold), var(--accent-amber))'
+                                                ? 'var(--gradient-primary)'
                                                 : 'transparent',
-                                        color: view === v ? '#05060F' : 'var(--text-muted)',
+                                        color: view === v ? '#FAFAFA' : 'var(--text-muted)',
                                         transition: 'all 0.2s ease',
                                     }}
                                     whileTap={{ scale: 0.95 }}
@@ -278,7 +275,7 @@ export default function PlannerPage() {
                             <label
                                 style={{
                                     fontSize: '0.8rem',
-                                    color: 'var(--accent-gold)',
+                                    color: 'var(--primary-400)',
                                     fontWeight: 600,
                                     textTransform: 'uppercase',
                                     letterSpacing: '1px',
@@ -340,7 +337,7 @@ export default function PlannerPage() {
                                     style={{
                                         height: '100%',
                                         borderRadius: '2px',
-                                        background: 'linear-gradient(90deg, var(--accent-gold), var(--accent-amber))',
+                                        background: 'var(--gradient-primary)',
                                     }}
                                 />
                             </div>

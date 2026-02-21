@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
-import LanguageToggle from '@/components/LanguageToggle';
 import { Plus, Target, BookOpen, CheckCircle, Flame } from 'lucide-react';
 
 interface Goal {
@@ -79,7 +78,7 @@ function GoalCard({
                                 className="font-mono"
                                 style={{
                                     fontSize: '0.75rem',
-                                    color: pct >= 100 ? '#22C55E' : 'var(--accent-gold)',
+                                    color: pct >= 100 ? 'var(--secondary-400)' : 'var(--primary-400)',
                                     fontWeight: 700,
                                 }}
                             >
@@ -104,12 +103,12 @@ function GoalCard({
                                     borderRadius: '3px',
                                     background:
                                         pct >= 100
-                                            ? 'linear-gradient(90deg, #22C55E, #16A34A)'
-                                            : 'linear-gradient(90deg, var(--accent-gold), var(--accent-amber))',
+                                            ? 'linear-gradient(90deg, var(--secondary-500), var(--secondary-400))'
+                                            : 'var(--gradient-primary)',
                                     boxShadow:
                                         pct >= 100
-                                            ? '0 0 8px rgba(34,197,94,0.4)'
-                                            : '0 0 8px var(--glow-gold-strong)',
+                                            ? '0 0 8px rgba(6,182,212,0.4)'
+                                            : '0 0 8px var(--glow-primary)',
                                 }}
                             />
                         </div>
@@ -141,7 +140,7 @@ function HabitGrid({ goal }: { goal: Goal }) {
                         borderRadius: '3px',
                         background:
                             i < goal.completed
-                                ? 'var(--accent-gold)'
+                                ? 'var(--primary-500)'
                                 : 'var(--bg-card)',
                         border: '1px solid var(--glass-border)',
                     }}
@@ -194,7 +193,6 @@ export default function GoalsPage() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '16px',
-                        paddingTop: '8px',
                     }}
                 >
                     <h1
@@ -208,7 +206,6 @@ export default function GoalsPage() {
                     >
                         {t('title')}
                     </h1>
-                    <LanguageToggle />
                 </motion.div>
 
                 <motion.div
@@ -233,7 +230,7 @@ export default function GoalsPage() {
                                     style={{
                                         fontSize: '1.8rem',
                                         fontWeight: 800,
-                                        color: 'var(--accent-gold)',
+                                        color: 'var(--primary-400)',
                                         margin: 0,
                                         lineHeight: 1,
                                     }}
@@ -262,7 +259,7 @@ export default function GoalsPage() {
                                     style={{
                                         fontSize: '1.8rem',
                                         fontWeight: 800,
-                                        color: 'var(--accent-teal)',
+                                        color: 'var(--secondary-400)',
                                         margin: 0,
                                         lineHeight: 1,
                                     }}
@@ -298,7 +295,7 @@ export default function GoalsPage() {
                                             <p
                                                 style={{
                                                     fontSize: '0.75rem',
-                                                    color: 'var(--accent-gold)',
+                                                    color: 'var(--primary-400)',
                                                     fontWeight: 600,
                                                     textTransform: 'uppercase',
                                                     letterSpacing: '1px',

@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
-import LanguageToggle from '@/components/LanguageToggle';
 import { BookOpen, CheckCircle, TrendingUp, Search } from 'lucide-react';
 
 const JUZ_NAMES = [
@@ -44,10 +43,10 @@ function JuzGrid({
                             aspectRatio: '1',
                             borderRadius: 'var(--radius-md)',
                             border: done
-                                ? '2px solid var(--accent-gold)'
+                                ? '2px solid var(--primary-500)'
                                 : '1px solid var(--glass-border)',
                             background: done
-                                ? 'linear-gradient(135deg, rgba(201,151,74,0.2), rgba(244,168,48,0.1))'
+                                ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1))'
                                 : 'var(--bg-card)',
                             cursor: 'pointer',
                             display: 'flex',
@@ -77,7 +76,7 @@ function JuzGrid({
                             style={{
                                 fontSize: '0.9rem',
                                 fontWeight: 700,
-                                color: done ? 'var(--accent-gold)' : 'var(--text-muted)',
+                                color: done ? 'var(--primary-400)' : 'var(--text-muted)',
                                 position: 'relative',
                                 zIndex: 1,
                             }}
@@ -90,7 +89,7 @@ function JuzGrid({
                                 animate={{ scale: 1 }}
                                 style={{ position: 'relative', zIndex: 1 }}
                             >
-                                <CheckCircle size={12} color="var(--accent-gold)" />
+                                <CheckCircle size={12} color="var(--primary-400)" />
                             </motion.div>
                         )}
                     </motion.button>
@@ -136,9 +135,9 @@ function ProgressBook({ completed }: { completed: number }) {
                             position: 'absolute',
                             inset: 0,
                             borderRadius: '4px 12px 12px 4px',
-                            background: 'linear-gradient(135deg, #1a3a2a, #0d2818)',
-                            border: '2px solid var(--accent-gold)',
-                            boxShadow: '4px 4px 12px rgba(0,0,0,0.4), 0 0 20px var(--glow-gold)',
+                            background: 'linear-gradient(135deg, #2E1065, #1E1B4B)',
+                            border: '2px solid var(--primary-500)',
+                            boxShadow: '4px 4px 12px rgba(0,0,0,0.4), 0 0 20px var(--glow-primary)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -146,12 +145,12 @@ function ProgressBook({ completed }: { completed: number }) {
                             gap: '8px',
                         }}
                     >
-                        <BookOpen size={28} color="var(--accent-gold)" />
+                        <BookOpen size={28} color="var(--primary-300)" />
                         <span
                             className="font-display"
                             style={{
                                 fontSize: '0.7rem',
-                                color: 'var(--accent-gold)',
+                                color: 'var(--primary-300)',
                                 letterSpacing: '1px',
                             }}
                         >
@@ -166,7 +165,7 @@ function ProgressBook({ completed }: { completed: number }) {
                             top: 0,
                             bottom: 0,
                             width: '12px',
-                            background: 'linear-gradient(to right, var(--accent-gold), #8B6914)',
+                            background: 'linear-gradient(to right, var(--primary-500), var(--primary-700, #4C1D95))',
                             borderRadius: '4px 0 0 4px',
                             transform: 'rotateY(-90deg) translateX(-6px)',
                             transformOrigin: 'left',
@@ -182,9 +181,9 @@ function ProgressBook({ completed }: { completed: number }) {
                     style={{
                         fontSize: '2.5rem',
                         fontWeight: 800,
-                        color: 'var(--accent-gold)',
+                        color: 'var(--primary-400)',
                         lineHeight: 1,
-                        textShadow: '0 0 20px var(--glow-gold-strong)',
+                        textShadow: '0 0 20px var(--glow-primary)',
                     }}
                 >
                     {pct}%
@@ -213,8 +212,8 @@ function ProgressBook({ completed }: { completed: number }) {
                         style={{
                             height: '100%',
                             borderRadius: '3px',
-                            background: 'linear-gradient(90deg, var(--accent-gold), var(--accent-amber))',
-                            boxShadow: '0 0 8px var(--glow-gold-strong)',
+                            background: 'var(--gradient-primary)',
+                            boxShadow: '0 0 8px var(--glow-primary)',
                         }}
                     />
                 </div>
@@ -264,7 +263,6 @@ export default function QuranPage() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '20px',
-                        paddingTop: '8px',
                     }}
                 >
                     <h1
@@ -278,7 +276,6 @@ export default function QuranPage() {
                     >
                         {t('title')}
                     </h1>
-                    <LanguageToggle />
                 </motion.div>
 
                 <motion.div
@@ -357,7 +354,7 @@ export default function QuranPage() {
                                             style={{
                                                 fontSize: '2rem',
                                                 fontWeight: 800,
-                                                color: 'var(--accent-gold)',
+                                                color: 'var(--primary-400)',
                                                 minWidth: '48px',
                                                 textAlign: 'center',
                                             }}
@@ -371,9 +368,9 @@ export default function QuranPage() {
                                                 width: '36px',
                                                 height: '36px',
                                                 borderRadius: '50%',
-                                                border: '1px solid var(--accent-gold)',
-                                                background: 'var(--glow-gold)',
-                                                color: 'var(--accent-gold)',
+                                                border: '1px solid var(--primary-500)',
+                                                background: 'var(--glow-primary)',
+                                                color: 'var(--primary-400)',
                                                 cursor: 'pointer',
                                                 fontSize: '1.2rem',
                                                 display: 'flex',
@@ -391,7 +388,7 @@ export default function QuranPage() {
                                             display: 'flex',
                                             alignItems: 'center',
                                             gap: '6px',
-                                            color: 'var(--accent-teal)',
+                                            color: 'var(--secondary-400)',
                                             fontSize: '0.8rem',
                                         }}
                                     >
@@ -431,8 +428,8 @@ export default function QuranPage() {
                                         width: '56px',
                                         height: '56px',
                                         borderRadius: '50%',
-                                        background: 'var(--glow-gold)',
-                                        border: '2px solid var(--accent-gold)',
+                                        background: 'var(--glow-primary)',
+                                        border: '2px solid var(--primary-500)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -449,7 +446,7 @@ export default function QuranPage() {
                                         style={{
                                             fontSize: '1.8rem',
                                             fontWeight: 800,
-                                            color: 'var(--accent-gold)',
+                                            color: 'var(--primary-400)',
                                             margin: 0,
                                             lineHeight: 1,
                                         }}

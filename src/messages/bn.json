@@ -23,7 +23,8 @@
         "prayers": "নামাজ",
         "duas": "দুআ",
         "goals": "লক্ষ্য",
-        "more": "আরো"
+        "more": "আরো",
+        "profile": "প্রোফাইল"
     },
     "dashboard": {
         "title": "রমজান ড্যাশবোর্ড",
@@ -122,5 +123,25 @@
         "ramadanSummary": "রমজান সারাংশ",
         "daysCompleted": "সম্পন্ন দিন",
         "goalsAchieved": "অর্জিত লক্ষ্য"
+    },
+    "profile": {
+        "title": "প্রোফাইল",
+        "account": "অ্যাকাউন্ট",
+        "appearance": "চেহারা",
+        "settings": "সেটিংস",
+        "guest": "অতিথি ব্যবহারকারী",
+        "userName": "রমজান ব্যবহারকারী",
+        "userEmail": "user@example.com",
+        "loginPrompt": "আপনার ডেটা সিঙ্ক করতে লগইন করুন",
+        "login": "লগইন",
+        "logout": "লগআউট",
+        "register": "রেজিস্টার",
+        "theme": "থিম",
+        "darkMode": "ডার্ক",
+        "lightMode": "লাইট",
+        "language": "ভাষা",
+        "notifications": "নোটিফিকেশন",
+        "privacy": "গোপনীয়তা ও নিরাপত্তা",
+        "help": "সাহায্য ও সমর্থন"
     }
 }

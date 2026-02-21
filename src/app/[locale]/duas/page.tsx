@@ -5,7 +5,6 @@ import { useTranslations, useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
-import LanguageToggle from '@/components/LanguageToggle';
 import { Search, Heart, RotateCcw } from 'lucide-react';
 
 interface Dua {
@@ -123,11 +122,11 @@ function DuaCard({
                     lang="ar"
                     style={{
                         fontSize: 'clamp(1.2rem, 3.5vw, 1.6rem)',
-                        color: 'var(--accent-gold)',
+                        color: 'var(--primary-400)',
                         lineHeight: 2,
                         textAlign: 'center',
                         marginBottom: '16px',
-                        textShadow: '0 0 20px var(--glow-gold)',
+                        textShadow: '0 0 20px var(--glow-primary)',
                         padding: '12px',
                         borderBottom: '1px solid var(--glass-border)',
                     }}
@@ -195,8 +194,8 @@ function DuaCard({
                     >
                         <Heart
                             size={20}
-                            fill={isFavorite ? 'var(--accent-gold)' : 'none'}
-                            color={isFavorite ? 'var(--accent-gold)' : 'var(--text-muted)'}
+                            fill={isFavorite ? 'var(--accent-500)' : 'none'}
+                            color={isFavorite ? 'var(--accent-500)' : 'var(--text-muted)'}
                         />
                     </motion.button>
                 </div>
@@ -257,10 +256,10 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                             padding: '6px 14px',
                             borderRadius: 'var(--radius-full)',
                             border: activeType === i
-                                ? '1px solid var(--accent-gold)'
+                                ? '1px solid var(--primary-500)'
                                 : '1px solid var(--glass-border)',
-                            background: activeType === i ? 'var(--glow-gold)' : 'transparent',
-                            color: activeType === i ? 'var(--accent-gold)' : 'var(--text-muted)',
+                            background: activeType === i ? 'var(--glow-primary)' : 'transparent',
+                            color: activeType === i ? 'var(--primary-400)' : 'var(--text-muted)',
                             cursor: 'pointer',
                             fontSize: '0.75rem',
                             fontWeight: 600,
@@ -281,15 +280,15 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                         width: '140px',
                         height: '140px',
                         borderRadius: '50%',
-                        border: '3px solid var(--accent-gold)',
-                        background: 'radial-gradient(circle, var(--glow-gold) 0%, var(--bg-card) 70%)',
+                        border: '3px solid var(--primary-500)',
+                        background: 'radial-gradient(circle, var(--glow-primary) 0%, var(--bg-card) 70%)',
                         cursor: 'pointer',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '4px',
-                        boxShadow: '0 0 30px var(--glow-gold), 0 0 60px rgba(201,151,74,0.1)',
+                        boxShadow: '0 0 30px var(--glow-primary), 0 0 60px rgba(139, 92, 246, 0.1)',
                         position: 'relative',
                         overflow: 'hidden',
                     }}
@@ -304,7 +303,7 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                             cy="73"
                             r="70"
                             fill="none"
-                            stroke="var(--accent-gold)"
+                            stroke="var(--primary-400)"
                             strokeWidth="3"
                             strokeDasharray={2 * Math.PI * 70}
                             strokeDashoffset={2 * Math.PI * 70 * (1 - pct / 100)}
@@ -318,7 +317,7 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                         dir="rtl"
                         style={{
                             fontSize: '1rem',
-                            color: 'var(--accent-gold)',
+                            color: 'var(--primary-400)',
                             position: 'relative',
                             zIndex: 1,
                         }}
@@ -413,7 +412,6 @@ export default function DuasPage() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '16px',
-                        paddingTop: '8px',
                     }}
                 >
                     <h1
@@ -427,7 +425,6 @@ export default function DuasPage() {
                     >
                         {t('title')}
                     </h1>
-                    <LanguageToggle />
                 </motion.div>
 
                 <motion.div
@@ -494,10 +491,10 @@ export default function DuasPage() {
                                 padding: '6px 14px',
                                 borderRadius: 'var(--radius-full)',
                                 border: !activeCategory
-                                    ? '1px solid var(--accent-gold)'
+                                    ? '1px solid var(--primary-500)'
                                     : '1px solid var(--glass-border)',
-                                background: !activeCategory ? 'var(--glow-gold)' : 'transparent',
-                                color: !activeCategory ? 'var(--accent-gold)' : 'var(--text-muted)',
+                                background: !activeCategory ? 'var(--glow-primary)' : 'transparent',
+                                color: !activeCategory ? 'var(--primary-400)' : 'var(--text-muted)',
                                 cursor: 'pointer',
                                 fontSize: '0.7rem',
                                 fontWeight: 600,
@@ -516,10 +513,10 @@ export default function DuasPage() {
                                     padding: '6px 14px',
                                     borderRadius: 'var(--radius-full)',
                                     border: activeCategory === cat
-                                        ? '1px solid var(--accent-gold)'
+                                        ? '1px solid var(--primary-500)'
                                         : '1px solid var(--glass-border)',
-                                    background: activeCategory === cat ? 'var(--glow-gold)' : 'transparent',
-                                    color: activeCategory === cat ? 'var(--accent-gold)' : 'var(--text-muted)',
+                                    background: activeCategory === cat ? 'var(--glow-primary)' : 'transparent',
+                                    color: activeCategory === cat ? 'var(--primary-400)' : 'var(--text-muted)',
                                     cursor: 'pointer',
                                     fontSize: '0.7rem',
                                     fontWeight: 600,

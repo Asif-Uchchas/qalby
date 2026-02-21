@@ -51,6 +51,7 @@ export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),
     name: text('name'),
     email: text('email').notNull().unique(),
+    password: text('password'),
     image: text('image'),
     location: text('location'),
     timezone: text('timezone').default('Asia/Dhaka'),

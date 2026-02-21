@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
-import LanguageToggle from '@/components/LanguageToggle';
 import GoldenParticleBurst from '@/components/GoldenParticleBurst';
 
 type PrayerStatus = 'pending' | 'ontime' | 'late' | 'missed';
@@ -19,9 +18,9 @@ interface PrayerState {
 
 const statusConfig: Record<PrayerStatus, { icon: string; color: string }> = {
     pending: { icon: '⬜', color: 'var(--text-muted)' },
-    ontime: { icon: '✅', color: '#22C55E' },
-    late: { icon: '⏰', color: '#F4A830' },
-    missed: { icon: '❌', color: '#EF4444' },
+    ontime: { icon: '✅', color: 'var(--secondary-500)' },
+    late: { icon: '⏰', color: 'var(--warm-500)' },
+    missed: { icon: '❌', color: 'var(--accent-500)' },
 };
 
 const statusCycle: PrayerStatus[] = ['pending', 'ontime', 'late', 'missed'];
@@ -137,11 +136,11 @@ function MonthlyHeatmap({ t }: { t: ReturnType<typeof useTranslations<'prayers'>
 
     const getColor = (value: number) => {
         if (value === 0) return 'var(--bg-card)';
-        if (value <= 1) return 'rgba(239, 68, 68, 0.4)';
-        if (value <= 2) return 'rgba(244, 168, 48, 0.4)';
-        if (value <= 3) return 'rgba(244, 168, 48, 0.6)';
-        if (value <= 4) return 'rgba(201, 151, 74, 0.7)';
-        return 'rgba(34, 197, 94, 0.8)';
+        if (value <= 1) return 'rgba(236, 72, 153, 0.4)'; // accent-500
+        if (value <= 2) return 'rgba(249, 115, 22, 0.4)'; // warm-500
+        if (value <= 3) return 'rgba(249, 115, 22, 0.6)'; // warm-500
+        if (value <= 4) return 'rgba(139, 92, 246, 0.7)'; // primary-500
+        return 'rgba(6, 182, 212, 0.8)'; // secondary-500
     };
 
     return (
@@ -264,7 +263,6 @@ export default function PrayersPage() {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         marginBottom: '20px',
-                        paddingTop: '8px',
                     }}
                 >
                     <h1
@@ -278,7 +276,6 @@ export default function PrayersPage() {
                     >
                         {t('title')}
                     </h1>
-                    <LanguageToggle />
                 </motion.div>
 
                 {/* Prayer Cards */}
@@ -339,10 +336,10 @@ export default function PrayersPage() {
                                 <motion.div
                                     animate={{
                                         background: tarawih
-                                            ? 'linear-gradient(135deg, var(--accent-gold), var(--accent-amber))'
+                                            ? 'var(--gradient-primary)'
                                             : 'var(--bg-card)',
                                         borderColor: tarawih
-                                            ? 'var(--accent-gold)'
+                                            ? 'var(--primary-500)'
                                             : 'var(--glass-border)',
                                     }}
                                     style={{

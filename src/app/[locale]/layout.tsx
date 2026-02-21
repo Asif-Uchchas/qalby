@@ -5,8 +5,8 @@ import { notFound } from 'next/navigation';
 import { DM_Sans, Amiri, JetBrains_Mono, Noto_Sans_Bengali } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import BottomNav from '@/components/BottomNav';
-import ThemeToggle from '@/components/ThemeToggle';
-import LanguageToggle from '@/components/LanguageToggle';
+import ThemeProvider from '@/components/ThemeProvider';
+import AuthProvider from '@/components/AuthProvider';
 import '../globals.css';
 
 const dmSans = DM_Sans({
@@ -76,7 +76,6 @@ export default async function LocaleLayout({
         <html
             lang={locale}
             dir="ltr"
-            data-theme="dark"
             className={`${dmSans.variable} ${amiri.variable} ${jetbrainsMono.variable} ${notoBangla.variable}`}
         >
             <body
@@ -84,26 +83,18 @@ export default async function LocaleLayout({
                     fontFamily: 'var(--font-dm-sans), system-ui, sans-serif',
                 }}
             >
-                <NextIntlClientProvider messages={messages}>
-                    <div className="geometric-bg" style={{ minHeight: '100dvh' }}>
-                        <header 
-                            className="fixed top-0 left-0 right-0 z-40 px-4 py-3 flex justify-end gap-2"
-                            style={{
-                                background: 'rgba(10, 10, 15, 0.7)',
-                                backdropFilter: 'blur(20px)',
-                                WebkitBackdropFilter: 'blur(20px)',
-                                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                            }}
-                        >
-                            <LanguageToggle />
-                            <ThemeToggle />
-                        </header>
-                        <main className="main-content pt-16" style={{ position: 'relative', zIndex: 1 }}>
-                            {children}
-                        </main>
-                        <BottomNav />
-                    </div>
-                </NextIntlClientProvider>
+                <ThemeProvider>
+                    <NextIntlClientProvider messages={messages}>
+                        <AuthProvider>
+                            <div className="geometric-bg" style={{ minHeight: '100dvh' }}>
+                                <main className="main-content pt-4" style={{ position: 'relative', zIndex: 1 }}>
+                                    {children}
+                                </main>
+                                <BottomNav />
+                            </div>
+                        </AuthProvider>
+                    </NextIntlClientProvider>
+                </ThemeProvider>
             </body>
         </html>
     );
