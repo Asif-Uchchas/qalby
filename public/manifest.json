@@ -1,0 +1,27 @@
+{
+    "name": "Qalby - Ramadan Companion",
+    "short_name": "Qalby",
+    "description": "A premium spiritual companion for Ramadan. Track prayers, Quran progress, duas, and daily goals.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#05060F",
+    "theme_color": "#C9974A",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["lifestyle", "religion"],
+    "lang": "en",
+    "dir": "ltr"
+}
