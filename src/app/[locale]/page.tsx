@@ -128,18 +128,18 @@ export default function DashboardPage() {
             <GiftGreeting />
             <div className="max-w-7xl mx-auto p-4 md:p-8 w-full min-h-screen">
                 {/* Header */}
-                <div className="mb-10 text-center md:text-left flex flex-col md:flex-row items-center gap-6">
+                <div className="mb-6 md:mb-10 text-center md:text-left flex flex-col md:flex-row items-center gap-4 md:gap-6">
                     <div className="logo-glow animate-float">
-                        <QalbyLogo size={80} />
+                        <QalbyLogo size={64} className="sm:w-20 sm:h-20" />
                     </div>
                     <div>
-                        <h1 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-2">
+                        <h1 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-1 md:mb-2">
                             {t('greeting')} 👋
                         </h1>
-                        <p className="text-text-muted text-lg md:text-xl flex items-center justify-center md:justify-start gap-2">
+                        <p className="text-text-muted text-base md:text-xl flex items-center justify-center md:justify-start gap-2">
                             <span>Day {data?.ramadanDay || 3} of Ramadan</span>
                             <span className="h-1.5 w-1.5 rounded-full bg-accent-400"></span>
-                            <span className="text-accent-400 font-semibold tracking-wider uppercase text-sm">Qalby Premium</span>
+                            <span className="text-accent-400 font-semibold tracking-wider uppercase text-xs sm:text-sm">Qalby Premium</span>
                         </p>
                     </div>
                 </div>

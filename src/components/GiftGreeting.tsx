@@ -82,34 +82,39 @@ export default function GiftGreeting() {
                             textAlign: 'center',
                             position: 'relative',
                             zIndex: 1,
+                            maxHeight: '90vh',
+                            overflowY: 'auto',
+                            padding: '20px'
                         }}
                     >
-                        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
                             <motion.div
                                 animate={{
-                                    scale: [1, 1.15, 1],
-                                    filter: ['drop-shadow(0 0 10px var(--accent-500))', 'drop-shadow(0 0 30px var(--accent-500))', 'drop-shadow(0 0 10px var(--accent-500))']
+                                    scale: [1, 1.1, 1],
+                                    filter: ['drop-shadow(0 0 10px var(--accent-500))', 'drop-shadow(0 0 20px var(--accent-500))', 'drop-shadow(0 0 10px var(--accent-500))']
                                 }}
                                 transition={{ duration: 2, repeat: Infinity }}
                             >
-                                <Heart size={80} fill="var(--accent-500)" color="var(--accent-500)" />
+                                <Heart
+                                    className="w-12 h-12 sm:w-20 sm:h-20"
+                                    fill="var(--accent-500)"
+                                    color="var(--accent-500)"
+                                />
                             </motion.div>
                         </div>
 
-                        <h2 className="font-display" style={{
-                            fontSize: '2rem',
+                        <h2 className="font-display text-2xl sm:text-4xl" style={{
                             color: 'var(--text-primary)',
-                            marginBottom: '16px',
+                            marginBottom: '12px',
                             textShadow: '0 0 20px var(--glow-primary)'
                         }}>
                             Welcome Back, My Love
                         </h2>
 
-                        <p style={{
+                        <p className="text-sm sm:text-lg" style={{
                             color: 'var(--text-muted)',
-                            lineHeight: 1.6,
-                            marginBottom: '32px',
-                            fontSize: '1.1rem'
+                            lineHeight: 1.5,
+                            marginBottom: '24px',
                         }}>
                             May this Ramadan bring peace, joy, and countless blessings to your heart. I am so lucky to have you.
                         </p>
@@ -121,11 +126,11 @@ export default function GiftGreeting() {
                             style={{
                                 background: 'linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%)',
                                 color: 'white',
-                                padding: '14px 40px',
+                                padding: '12px 32px',
                                 borderRadius: 'var(--radius-full)',
                                 border: 'none',
                                 fontWeight: 700,
-                                fontSize: '1rem',
+                                fontSize: '0.9rem',
                                 cursor: 'pointer',
                                 boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.4), 0 0 30px var(--glow-primary)',
                             }}
