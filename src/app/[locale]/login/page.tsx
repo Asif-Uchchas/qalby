@@ -49,7 +49,7 @@ export default function LoginPage() {
 
     return (
         <PageTransition>
-            <div className="min-h-[100dvh] flex items-center justify-center p-6 bg-[#0A0A0F] relative overflow-hidden star-pattern">
+            <div className="min-h-[100dvh] flex items-center justify-center p-6 bg-[#050D09] relative overflow-hidden star-pattern">
                 {/* Celestial Background Elements */}
                 <div className="absolute inset-0 z-0">
                     <motion.div
@@ -97,18 +97,21 @@ export default function LoginPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <GlassCard elevated={false} hover={false} className="p-0 border-white/5 overflow-hidden shadow-2xl shadow-black/50">
+                        <GlassCard elevated={false} hover={false} className="p-0 border-white/10 overflow-hidden shadow-2xl shadow-black/50 bg-[#0A1410]/60 backdrop-blur-xl">
                             {/* Card Header with Animated Gradient */}
-                            <div className="relative p-8 pb-4 text-center">
+                            <div className="relative px-8 pb-6 pt-8 text-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent pointer-events-none" />
                                 <motion.div
                                     initial={{ y: -20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.3 }}
-                                    className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 relative group"
+                                    className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-6 relative group"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity" />
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl" />
-                                    <LogIn size={32} className="text-white relative z-10" />
+                                    <div className="relative z-10 p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+                                        <LogIn size={28} className="text-white" />
+                                    </div>
                                 </motion.div>
 
                                 <motion.h1
@@ -129,13 +132,13 @@ export default function LoginPage() {
                                 </motion.p>
                             </div>
 
-                            <div className="px-8 pb-8 pt-4">
-                                <form onSubmit={handleCredentialsSignIn} className="space-y-5">
+                            <div className="px-8 pb-8 pt-2">
+                                <form onSubmit={handleCredentialsSignIn} className="space-y-6">
                                     <motion.div
                                         initial={{ x: -10, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 0.6 }}
-                                        className="space-y-1.5"
+                                        className="space-y-2"
                                     >
                                         <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1">{t('email')}</label>
                                         <div className="relative group">
@@ -148,7 +151,7 @@ export default function LoginPage() {
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder="email@example.com"
                                                 required
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all font-medium placeholder:text-text-muted/50"
+                                                className="w-full bg-[#0A1410]/80 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/50 transition-all font-medium placeholder:text-text-muted/40 shadow-inner"
                                             />
                                         </div>
                                     </motion.div>
@@ -157,7 +160,7 @@ export default function LoginPage() {
                                         initial={{ x: -10, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
                                         transition={{ delay: 0.7 }}
-                                        className="space-y-1.5"
+                                        className="space-y-2"
                                     >
                                         <label className="text-xs font-bold text-text-muted uppercase tracking-widest ml-1">{t('password')}</label>
                                         <div className="relative group">
@@ -170,7 +173,7 @@ export default function LoginPage() {
                                                 onChange={(e) => setPassword(e.target.value)}
                                                 placeholder="••••••••"
                                                 required
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500/50 transition-all font-medium placeholder:text-text-muted/50"
+                                                className="w-full bg-[#0A1410]/80 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/50 transition-all font-medium placeholder:text-text-muted/40 shadow-inner"
                                             />
                                         </div>
                                     </motion.div>
@@ -194,7 +197,7 @@ export default function LoginPage() {
                                         transition={{ delay: 0.8 }}
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full h-[54px] rounded-xl font-bold text-white transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 relative overflow-hidden group/btn shadow-xl shadow-primary-500/20"
+                                        className="w-full h-14 rounded-xl font-bold text-white transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 relative overflow-hidden group/btn shadow-2xl shadow-emerald-900/30 hover:shadow-emerald-600/40"
                                         style={{ background: 'var(--gradient-primary)' }}
                                     >
                                         <div className="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
@@ -211,10 +214,10 @@ export default function LoginPage() {
 
                                 <div className="mt-8 relative">
                                     <div className="absolute inset-0 flex items-center">
-                                        <div className="w-full border-t border-white/5" />
+                                        <div className="w-full border-t border-white/8" />
                                     </div>
                                     <div className="relative flex justify-center">
-                                        <span className="bg-[#0A0A0F]/50 backdrop-blur-md px-4 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">Or continue with</span>
+                                        <span className="bg-[#0A1410]/80 backdrop-blur-md px-5 py-1 text-[11px] font-black uppercase tracking-[0.25em] text-text-muted/60 border border-white/5 rounded-full">Or continue with</span>
                                     </div>
                                 </div>
 
@@ -223,7 +226,7 @@ export default function LoginPage() {
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.9 }}
                                     onClick={handleGoogleSignIn}
-                                    className="mt-6 w-full flex items-center justify-center gap-3 h-[54px] rounded-xl font-bold transition-all duration-300 bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-text-primary"
+                                    className="mt-6 w-full flex items-center justify-center gap-3 h-14 rounded-xl font-bold transition-all duration-300 bg-[#0A1410]/80 border border-white/10 hover:bg-[#0F1F1A] hover:border-white/25 text-text-primary shadow-lg hover:shadow-xl"
                                 >
                                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -243,13 +246,13 @@ export default function LoginPage() {
                                     <span className="text-text-secondary text-sm font-medium">{t('noAccount')} </span>
                                     <Link
                                         href={`/${locale}/register`}
-                                        className="text-primary-400 font-bold hover:text-primary-300 transition-colors"
+                                        className="text-primary-400 font-bold hover:text-primary-300 transition-colors underline decoration-1 underline-offset-4"
                                     >
                                         {t('signUp')}
                                     </Link>
                                 </motion.div>
 
-                                <p className="mt-8 text-[10px] text-text-muted/40 font-medium leading-relaxed max-w-[280px] mx-auto uppercase tracking-tighter">
+                                <p className="mt-8 text-[11px] text-text-muted/50 font-medium leading-relaxed max-w-[300px] mx-auto text-center tracking-wide">
                                     {t('termsDisclaimer')}
                                 </p>
                             </div>

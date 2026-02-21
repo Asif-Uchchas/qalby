@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
 import PageTransition from '@/components/PageTransition';
 import GoldenParticleBurst from '@/components/GoldenParticleBurst';
+import { subDays } from 'date-fns';
 
 type PrayerStatus = 'pending' | 'ontime' | 'late' | 'missed';
 type PrayerName = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
@@ -128,19 +129,22 @@ function PrayerCard({
     );
 }
 
-function MonthlyHeatmap({ t }: { t: ReturnType<typeof useTranslations<'prayers'>> }) {
+function MonthlyHeatmap({ data, t }: { data: any[]; t: ReturnType<typeof useTranslations<'prayers'>> }) {
     const days = 30;
-    const demoData = Array.from({ length: days }, () =>
-        Math.floor(Math.random() * 6)
-    );
+    // Map history to 30 days
+    const heatData = Array.from({ length: days }, (_, i) => {
+        const dateStr = subDays(new Date(), days - 1 - i).toISOString().split('T')[0];
+        const entry = data.find(d => d.date === dateStr);
+        return entry ? entry.count : 0;
+    });
 
     const getColor = (value: number) => {
         if (value === 0) return 'var(--bg-card)';
-        if (value <= 1) return 'rgba(236, 72, 153, 0.4)'; // accent-500
+        if (value <= 1) return 'rgba(245, 158, 11, 0.4)'; // accent gold
         if (value <= 2) return 'rgba(249, 115, 22, 0.4)'; // warm-500
         if (value <= 3) return 'rgba(249, 115, 22, 0.6)'; // warm-500
-        if (value <= 4) return 'rgba(139, 92, 246, 0.7)'; // primary-500
-        return 'rgba(6, 182, 212, 0.8)'; // secondary-500
+        if (value <= 4) return 'rgba(16, 185, 129, 0.7)'; // primary emerald
+        return 'rgba(13, 148, 136, 0.8)'; // secondary jade
     };
 
     return (
@@ -164,7 +168,7 @@ function MonthlyHeatmap({ t }: { t: ReturnType<typeof useTranslations<'prayers'>
                     gap: '4px',
                 }}
             >
-                {demoData.map((value, i) => (
+                {heatData.map((value, i) => (
                     <motion.div
                         key={i}
                         initial={{ opacity: 0, scale: 0 }}
@@ -183,9 +187,8 @@ function MonthlyHeatmap({ t }: { t: ReturnType<typeof useTranslations<'prayers'>
                             color: 'var(--text-muted)',
                         }}
                         whileHover={{ scale: 1.2 }}
-                        title={`Day ${i + 1}: ${value}/5 prayers`}
+                        title={`Day: ${value}/5 prayers on time`}
                     >
-                        {i + 1}
                     </motion.div>
                 ))}
             </div>
@@ -228,14 +231,61 @@ function MonthlyHeatmap({ t }: { t: ReturnType<typeof useTranslations<'prayers'>
 export default function PrayersPage() {
     const t = useTranslations('prayers');
     const [prayers, setPrayers] = useState<PrayerState[]>(defaultPrayers);
+    const [history, setHistory] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const [tarawih, setTarawih] = useState(false);
     const [showBurst, setShowBurst] = useState(false);
 
-    const handleStatusChange = (name: PrayerName, status: PrayerStatus) => {
+    const fetchPrayers = async () => {
+        try {
+            setLoading(true);
+            const [pRes, hRes] = await Promise.all([
+                fetch('/api/prayers'),
+                fetch('/api/prayers?type=history'),
+            ]);
+
+            if (pRes.ok) {
+                const dbPrayers = await pRes.json();
+                if (dbPrayers.length > 0) {
+                    setPrayers(prev => prev.map(p => {
+                        const dbP = dbPrayers.find((dbp: any) => dbp.prayer === p.name);
+                        return dbP ? { ...p, status: dbP.status } : p;
+                    }));
+                }
+            }
+            if (hRes.ok) {
+                const hData = await hRes.json();
+                setHistory(hData);
+            }
+        } catch (error) {
+            console.error('Failed to fetch prayers:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPrayers();
+    }, []);
+
+    const handleStatusChange = async (name: PrayerName, status: PrayerStatus) => {
         const updated = prayers.map((p) =>
             p.name === name ? { ...p, status } : p
         );
         setPrayers(updated);
+
+        try {
+            await fetch('/api/prayers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prayer: name, status }),
+            });
+            // Update history set after change
+            const hRes = await fetch('/api/prayers?type=history');
+            if (hRes.ok) setHistory(await hRes.json());
+        } catch (error) {
+            console.error('Failed to update prayer:', error);
+        }
 
         // Check if all prayers are on-time
         const allOnTime = updated.every((p) => p.status === 'ontime');
@@ -376,7 +426,13 @@ export default function PrayersPage() {
                             show: { opacity: 1, y: 0 },
                         }}
                     >
-                        <MonthlyHeatmap t={t} />
+                        {loading ? (
+                            <GlassCard elevated hover={false} style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <p style={{ color: 'var(--text-muted)' }}>{t('loading')}...</p>
+                            </GlassCard>
+                        ) : (
+                            <MonthlyHeatmap data={history} t={t} />
+                        )}
                     </motion.div>
                 </motion.div>
 

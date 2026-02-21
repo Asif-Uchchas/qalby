@@ -24,12 +24,12 @@ export default function QuickAddFAB({ onClick }: QuickAddFABProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'linear-gradient(135deg, var(--accent-gold), var(--accent-amber))',
-                boxShadow: '0 4px 20px rgba(201, 151, 74, 0.4), 0 0 40px rgba(201, 151, 74, 0.15)',
+                background: 'var(--gradient-warm)',
+                boxShadow: '0 4px 20px var(--glow-accent), 0 0 40px var(--glow-card)',
             }}
             whileHover={{
                 scale: 1.1,
-                boxShadow: '0 6px 30px rgba(201, 151, 74, 0.5), 0 0 60px rgba(201, 151, 74, 0.2)',
+                boxShadow: '0 6px 30px var(--glow-accent), 0 0 60px var(--glow-card)',
             }}
             whileTap={{ scale: 0.9 }}
             initial={{ scale: 0, rotate: -180 }}

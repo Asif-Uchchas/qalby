@@ -83,13 +83,13 @@ export default function ProfilePage() {
                     {/* Profile Card */}
                     <motion.div variants={itemVariants}>
                         <GlassCard elevated={false} className="relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent-purple/10 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-accent-purple/20 transition-colors" />
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-emerald-500/20 transition-colors" />
                             <div className="flex items-center gap-5 relative z-10">
                                 <div className="relative group/avatar">
                                     <div
                                         className="w-20 h-20 rounded-2xl flex items-center justify-center overflow-hidden ring-2 ring-white/10 shadow-xl transition-transform duration-500 group-hover/avatar:scale-105"
                                         style={{
-                                            background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-pink))',
+                                            background: 'linear-gradient(135deg, var(--primary-500), var(--accent-400))',
                                         }}
                                     >
                                         {session?.user?.image ? (
@@ -150,14 +150,14 @@ export default function ProfilePage() {
                                             onClick={() => router.push(`/${locale}/login`)}
                                             className="group flex flex-col items-center gap-3 p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02]"
                                             style={{
-                                                background: 'rgba(139, 92, 246, 0.08)',
-                                                border: '1px solid rgba(139, 92, 246, 0.2)',
+                                                background: 'rgba(16, 185, 129, 0.08)',
+                                                border: '1px solid rgba(16, 185, 129, 0.2)',
                                             }}
                                         >
-                                            <div className="p-3 rounded-xl bg-accent-purple/20 text-accent-purple group-hover:scale-110 transition-transform">
+                                            <div className="p-3 rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-110 transition-transform">
                                                 <LogIn size={24} />
                                             </div>
-                                            <span className="font-bold text-accent-purple">{t('login')}</span>
+                                            <span className="font-bold text-emerald-400">{t('login')}</span>
                                         </button>
                                         <button
                                             onClick={() => router.push(`/${locale}/login`)}
@@ -167,10 +167,10 @@ export default function ProfilePage() {
                                                 border: '1px solid rgba(46, 207, 196, 0.2)',
                                             }}
                                         >
-                                            <div className="p-3 rounded-xl bg-accent-teal/20 text-accent-teal group-hover:scale-110 transition-transform">
+                                            <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform">
                                                 <UserPlus size={24} />
                                             </div>
-                                            <span className="font-bold text-accent-teal">{t('register')}</span>
+                                            <span className="font-bold text-amber-400">{t('register')}</span>
                                         </button>
                                     </div>
                                 )}
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                                     }}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-accent-purple/20 text-accent-purple' : 'bg-accent-gold/20 text-accent-gold'}`}>
+                                        <div className={`p-2.5 rounded-lg ${theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-500'}`}>
                                             {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
                                         </div>
                                         <div className="text-left">
@@ -205,7 +205,7 @@ export default function ProfilePage() {
                                     <div className="flex items-center gap-2">
                                         <div className="w-12 h-6 rounded-full bg-white/10 relative p-1 transition-colors">
                                             <motion.div
-                                                className={`w-4 h-4 rounded-full ${theme === 'dark' ? 'bg-accent-purple' : 'bg-accent-gold'}`}
+                                                className={`w-4 h-4 rounded-full ${theme === 'dark' ? 'bg-emerald-500' : 'bg-amber-500'}`}
                                                 animate={{ x: theme === 'dark' ? 24 : 0 }}
                                             />
                                         </div>
@@ -221,7 +221,7 @@ export default function ProfilePage() {
                                     }}
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="p-2.5 rounded-lg bg-accent-teal/20 text-accent-teal">
+                                        <div className="p-2.5 rounded-lg bg-teal-500/20 text-teal-400">
                                             <Languages size={20} />
                                         </div>
                                         <div className="text-left">
@@ -243,9 +243,9 @@ export default function ProfilePage() {
                             </h3>
                             <div className="grid grid-cols-1 gap-2">
                                 {[
-                                    { icon: Bell, label: t('notifications'), color: 'var(--accent-purple)' },
-                                    { icon: Shield, label: t('privacy'), color: 'var(--accent-teal)' },
-                                    { icon: HelpCircle, label: t('help'), color: 'var(--accent-gold)' },
+                                    { icon: Bell, label: t('notifications'), color: 'var(--primary-400)' },
+                                    { icon: Shield, label: t('privacy'), color: 'var(--secondary-400)' },
+                                    { icon: HelpCircle, label: t('help'), color: 'var(--accent-400)' },
                                 ].map((item, idx) => (
                                     <button
                                         key={idx}

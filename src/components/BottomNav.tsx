@@ -90,9 +90,9 @@ export default function BottomNav() {
                                         style={{
                                             position: 'absolute',
                                             inset: 0,
-                                            background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.2))',
+                                            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.15))',
                                             borderRadius: 'var(--radius-md)',
-                                            border: '1px solid rgba(139, 92, 246, 0.5)',
+                                            border: '1px solid rgba(16, 185, 129, 0.4)',
                                         }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                                     />
@@ -100,10 +100,10 @@ export default function BottomNav() {
                                 <Icon
                                     size={22}
                                     style={{
-                                        color: active ? '#A78BFA' : 'var(--text-muted)',
+                                        color: active ? '#10B981' : 'var(--text-muted)',
                                         position: 'relative',
                                         zIndex: 1,
-                                        filter: active ? 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))' : 'none',
+                                        filter: active ? 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.5))' : 'none',
                                         transition: 'color 0.2s ease',
                                     }}
                                 />
@@ -111,7 +111,7 @@ export default function BottomNav() {
                                     style={{
                                         fontSize: '10px',
                                         fontWeight: active ? 700 : 500,
-                                        color: active ? '#A78BFA' : 'var(--text-muted)',
+                                        color: active ? '#10B981' : 'var(--text-muted)',
                                         position: 'relative',
                                         zIndex: 1,
                                         transition: 'color 0.2s ease',

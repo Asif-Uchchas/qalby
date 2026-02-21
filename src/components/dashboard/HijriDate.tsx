@@ -12,7 +12,7 @@ function getHijriDate(): { day: number; month: string; year: number } {
     // This is a placeholder that returns a reasonable Ramadan date
     const now = new Date();
     const hijriYear = 1447; // Approximate for 2026
-    const ramadanStart = new Date('2026-02-18'); // Approximate Ramadan 2026 start
+    const ramadanStart = new Date('2026-02-19'); // Adjusted so Feb 21 is Day 3
     const daysSinceStart = Math.floor(
         (now.getTime() - ramadanStart.getTime()) / (1000 * 60 * 60 * 24)
     );

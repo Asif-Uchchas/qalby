@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
@@ -107,7 +107,7 @@ function GoalCard({
                                             : 'var(--gradient-primary)',
                                     boxShadow:
                                         pct >= 100
-                                            ? '0 0 8px rgba(6,182,212,0.4)'
+                                            ? '0 0 12px var(--glow-secondary)'
                                             : '0 0 8px var(--glow-primary)',
                                 }}
                             />
@@ -152,28 +152,61 @@ function HabitGrid({ goal }: { goal: Goal }) {
 
 export default function GoalsPage() {
     const t = useTranslations('goals');
-    const [goals, setGoals] = useState(demoGoals);
+    const [goals, setGoals] = useState<Goal[]>([]);
     const [journalEntry, setJournalEntry] = useState('');
     const [showPrompt, setShowPrompt] = useState(true);
+    const [loading, setLoading] = useState(true);
+
+    const fetchGoals = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch('/api/goals');
+            if (res.ok) {
+                const data = await res.json();
+                setGoals(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch goals:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchGoals();
+    }, []);
 
     const promptIndex = new Date().getDay() % reflectionPrompts.length;
 
-    const incrementGoal = (id: string) => {
+    const incrementGoal = async (id: string, currentlyCompleted: number, target: number) => {
+        if (currentlyCompleted >= target) return;
+
+        // Optimistic update
         setGoals((prev) =>
             prev.map((g) =>
-                g.id === id && g.completed < g.target
-                    ? { ...g, completed: g.completed + 1 }
-                    : g
+                g.id === id ? { ...g, completed: g.completed + 1 } : g
             )
         );
+
+        try {
+            const res = await fetch('/api/goals', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goalId: id, completed: true }),
+            });
+            if (!res.ok) {
+                fetchGoals();
+            }
+        } catch (error) {
+            console.error('Failed to increment goal:', error);
+            fetchGoals();
+        }
     };
 
     const completedGoals = goals.filter((g) => g.completed >= g.target).length;
-    const totalDaysCompleted = Math.round(
-        goals.reduce((sum, g) => sum + g.completed / g.target, 0) /
-        goals.length *
-        30
-    );
+    const totalDaysCompleted = goals.length > 0
+        ? Math.round(goals.reduce((sum, g) => sum + g.completed, 0) / goals.length)
+        : 0;
 
     return (
         <PageTransition>
@@ -340,13 +373,23 @@ export default function GoalsPage() {
                             {t('progress')}
                         </p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            {goals.map((goal) => (
-                                <GoalCard
-                                    key={goal.id}
-                                    goal={goal}
-                                    onIncrement={() => incrementGoal(goal.id)}
-                                />
-                            ))}
+                            {loading ? (
+                                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
+                                    {t('loading')}...
+                                </p>
+                            ) : goals.length === 0 ? (
+                                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
+                                    No goals yet.
+                                </p>
+                            ) : (
+                                goals.map((goal) => (
+                                    <GoalCard
+                                        key={goal.id}
+                                        goal={goal}
+                                        onIncrement={() => incrementGoal(goal.id, goal.completed, goal.target)}
+                                    />
+                                ))
+                            )}
                         </div>
                     </motion.div>
 

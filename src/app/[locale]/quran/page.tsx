@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
@@ -46,7 +46,7 @@ function JuzGrid({
                                 ? '2px solid var(--primary-500)'
                                 : '1px solid var(--glass-border)',
                             background: done
-                                ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.1))'
+                                ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(245, 158, 11, 0.1))'
                                 : 'var(--bg-card)',
                             cursor: 'pointer',
                             display: 'flex',
@@ -224,24 +224,69 @@ function ProgressBook({ completed }: { completed: number }) {
 
 export default function QuranPage() {
     const t = useTranslations('quran');
-    const [completedJuz, setCompletedJuz] = useState<Set<number>>(
-        new Set([1, 2, 3, 4, 5, 6, 7])
-    );
-    const [pagesRead, setPagesRead] = useState(12);
+    const [completedJuz, setCompletedJuz] = useState<Set<number>>(new Set());
+    const [pagesRead, setPagesRead] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const toggleJuz = (juz: number) => {
-        setCompletedJuz((prev) => {
-            const next = new Set(prev);
-            if (next.has(juz)) {
-                next.delete(juz);
-            } else {
-                next.add(juz);
+    const fetchProgress = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch('/api/quran');
+            if (res.ok) {
+                const data = await res.json();
+                setCompletedJuz(new Set(data.completedJuz));
+                setPagesRead(data.pagesReadToday);
             }
-            return next;
-        });
+        } catch (error) {
+            console.error('Failed to fetch quran progress:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const daysLeft = 30 - 4; // demo
+    useEffect(() => {
+        fetchProgress();
+    }, []);
+
+    const toggleJuz = async (juz: number) => {
+        const isDone = completedJuz.has(juz);
+
+        // Optimistic update
+        setCompletedJuz((prev) => {
+            const next = new Set(prev);
+            if (isDone) next.delete(juz);
+            else next.add(juz);
+            return next;
+        });
+
+        try {
+            await fetch('/api/quran', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ juzNumber: juz, completed: !isDone }),
+            });
+        } catch (error) {
+            console.error('Failed to toggle juz:', error);
+            fetchProgress(); // Rollback
+        }
+    };
+
+    const updatePages = async (newPages: number) => {
+        const pages = Math.max(0, newPages);
+        setPagesRead(pages);
+
+        try {
+            await fetch('/api/quran', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pages }),
+            });
+        } catch (error) {
+            console.error('Failed to update pages:', error);
+        }
+    };
+
+    const daysLeft = 26; // Mock for now, should calculate based on Ramadan dates
     const pagesLeft = (30 - completedJuz.size) * 20;
     const pagesPerDay = daysLeft > 0 ? Math.ceil(pagesLeft / daysLeft) : 0;
 
@@ -329,7 +374,7 @@ export default function QuranPage() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <motion.button
                                             whileTap={{ scale: 0.8 }}
-                                            onClick={() => setPagesRead(Math.max(0, pagesRead - 1))}
+                                            onClick={() => updatePages(pagesRead - 1)}
                                             style={{
                                                 width: '36px',
                                                 height: '36px',
@@ -363,7 +408,7 @@ export default function QuranPage() {
                                         </motion.span>
                                         <motion.button
                                             whileTap={{ scale: 0.8 }}
-                                            onClick={() => setPagesRead(pagesRead + 1)}
+                                            onClick={() => updatePages(pagesRead + 1)}
                                             style={{
                                                 width: '36px',
                                                 height: '36px',
@@ -415,7 +460,13 @@ export default function QuranPage() {
                             >
                                 {t('juzCompleted', { count: completedJuz.size })}
                             </p>
-                            <JuzGrid completed={completedJuz} onToggle={toggleJuz} />
+                            {loading ? (
+                                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
+                                    {t('loading')}...
+                                </p>
+                            ) : (
+                                <JuzGrid completed={completedJuz} onToggle={toggleJuz} />
+                            )}
                         </GlassCard>
                     </motion.div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
@@ -85,7 +85,7 @@ function TaskCard({
                             position: 'absolute',
                             inset: 0,
                             background:
-                                'linear-gradient(90deg, transparent, rgba(201,151,74,0.15), transparent)',
+                                'linear-gradient(90deg, transparent, var(--glow-accent), transparent)',
                             pointerEvents: 'none',
                         }}
                     />
@@ -160,7 +160,7 @@ function TaskCard({
                         }}
                     >
                         {task.completed && (
-                            <Check size={14} color="#05060F" strokeWidth={3} />
+                            <Check size={14} color="var(--bg-void)" strokeWidth={3} />
                         )}
                     </motion.div>
                 </div>
@@ -171,16 +171,89 @@ function TaskCard({
 
 export default function PlannerPage() {
     const t = useTranslations('planner');
-    const [tasks, setTasks] = useState(demoTasks);
+    const [tasks, setTasks] = useState<PlannerTask[]>([]);
     const [niyyah, setNiyyah] = useState('');
     const [view, setView] = useState<'day' | 'week'>('day');
+    const [loading, setLoading] = useState(true);
+    const [newTaskTitle, setNewTaskTitle] = useState('');
 
-    const toggleTask = (id: string) => {
+    const fetchTasks = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch('/api/planner');
+            if (res.ok) {
+                const data = await res.json();
+                setTasks(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch tasks:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    const addTask = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newTaskTitle.trim()) return;
+
+        const title = newTaskTitle.trim();
+        setNewTaskTitle('');
+
+        try {
+            const res = await fetch('/api/planner', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title,
+                    date: new Date().toISOString().split('T')[0],
+                    category: 'worship',
+                }),
+            });
+
+            if (res.ok) {
+                const newTask = await res.json();
+                setTasks((prev) => [...prev, newTask]);
+            }
+        } catch (error) {
+            console.error('Failed to add task:', error);
+        }
+    };
+
+    const toggleTask = async (id: string, currentlyCompleted: boolean) => {
+        // Optimistic update
         setTasks((prev) =>
             prev.map((task) =>
-                task.id === id ? { ...task, completed: !task.completed } : task
+                task.id === id ? { ...task, completed: !currentlyCompleted } : task
             )
         );
+
+        try {
+            const res = await fetch('/api/planner', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, completed: !currentlyCompleted }),
+            });
+            if (!res.ok) {
+                // Rollback on error
+                setTasks((prev) =>
+                    prev.map((task) =>
+                        task.id === id ? { ...task, completed: currentlyCompleted } : task
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('Failed to toggle task:', error);
+            // Rollback on error
+            setTasks((prev) =>
+                prev.map((task) =>
+                    task.id === id ? { ...task, completed: currentlyCompleted } : task
+                )
+            );
+        }
     };
 
     const completedCount = tasks.filter((t) => t.completed).length;
@@ -305,6 +378,66 @@ export default function PlannerPage() {
                         </GlassCard>
                     </motion.div>
 
+                    {/* Add Task Input */}
+                    <motion.div
+                        variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+                    >
+                        <form
+                            onSubmit={addTask}
+                            style={{
+                                display: 'flex',
+                                gap: '8px',
+                            }}
+                        >
+                            <div style={{ flex: 1, position: 'relative' }}>
+                                <input
+                                    type="text"
+                                    value={newTaskTitle}
+                                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                                    placeholder={t('addTask')}
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px 14px',
+                                        paddingLeft: '40px',
+                                        borderRadius: 'var(--radius-md)',
+                                        border: '1px solid var(--glass-border)',
+                                        background: 'var(--bg-card)',
+                                        color: 'var(--text-primary)',
+                                        fontSize: '0.9rem',
+                                        outline: 'none',
+                                    }}
+                                />
+                                <Plus
+                                    size={18}
+                                    style={{
+                                        position: 'absolute',
+                                        left: '14px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        color: 'var(--text-muted)',
+                                    }}
+                                />
+                            </div>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                type="submit"
+                                style={{
+                                    padding: '0 20px',
+                                    borderRadius: 'var(--radius-md)',
+                                    border: 'none',
+                                    background: 'var(--gradient-primary)',
+                                    color: '#FAFAFA',
+                                    fontSize: '0.85rem',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {t('addTask')}
+                            </motion.button>
+                        </form>
+                    </motion.div>
+
                     {/* Progress Summary */}
                     <motion.div
                         variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
@@ -319,42 +452,66 @@ export default function PlannerPage() {
                         >
                             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                                 <Clock size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
-                                {completedCount}/{tasks.length} {t('completed')}
+                                {tasks.length > 0 ? (
+                                    `${completedCount}/${tasks.length} ${t('completed')}`
+                                ) : (
+                                    t('noTasks')
+                                )}
                             </span>
-                            <div
-                                style={{
-                                    flex: 1,
-                                    maxWidth: '120px',
-                                    height: '4px',
-                                    borderRadius: '2px',
-                                    background: 'var(--bg-card)',
-                                    marginLeft: '12px',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <motion.div
-                                    animate={{ width: `${(completedCount / tasks.length) * 100}%` }}
+                            {tasks.length > 0 && (
+                                <div
                                     style={{
-                                        height: '100%',
+                                        flex: 1,
+                                        maxWidth: '120px',
+                                        height: '4px',
                                         borderRadius: '2px',
-                                        background: 'var(--gradient-primary)',
+                                        background: 'var(--bg-card)',
+                                        marginLeft: '12px',
+                                        overflow: 'hidden',
                                     }}
-                                />
-                            </div>
+                                >
+                                    <motion.div
+                                        animate={{ width: `${(completedCount / tasks.length) * 100}%` }}
+                                        style={{
+                                            height: '100%',
+                                            borderRadius: '2px',
+                                            background: 'var(--gradient-primary)',
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </motion.div>
 
                     {/* Task List */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <AnimatePresence>
-                            {tasks.map((task) => (
-                                <TaskCard
-                                    key={task.id}
-                                    task={task}
-                                    onToggle={() => toggleTask(task.id)}
-                                    t={t}
-                                />
-                            ))}
+                            {loading ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}
+                                >
+                                    {t('loading')}...
+                                </motion.div>
+                            ) : tasks.length === 0 ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}
+                                >
+                                    {t('emptyPlanner')}
+                                </motion.div>
+                            ) : (
+                                tasks.map((task) => (
+                                    <TaskCard
+                                        key={task.id}
+                                        task={task}
+                                        onToggle={() => toggleTask(task.id, task.completed)}
+                                        t={t}
+                                    />
+                                ))
+                            )}
                         </AnimatePresence>
                     </div>
                 </motion.div>

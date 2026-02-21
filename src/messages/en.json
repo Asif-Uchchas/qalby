@@ -60,7 +60,10 @@
     },
     "preSuhoor": "Pre-Suhoor",
     "postSuhoor": "Post-Suhoor",
-    "completed": "Completed"
+    "completed": "Completed",
+    "noTasks": "No tasks",
+    "emptyPlanner": "Your planner is empty. Add a task to get started!",
+    "loading": "Loading tasks..."
   },
   "quran": {
     "title": "Quran Tracker",

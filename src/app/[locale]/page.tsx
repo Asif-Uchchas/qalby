@@ -53,80 +53,154 @@ const demoStreakData = Array.from({ length: 28 }, (_, i) => {
     };
 });
 
+import { useState, useEffect } from 'react';
+
 export default function DashboardPage() {
     const t = useTranslations('dashboard');
+    const [data, setData] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchDashboardData = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch('/api/dashboard');
+            if (res.ok) {
+                const d = await res.json();
+                setData(d);
+            }
+        } catch (error) {
+            console.error('Failed to fetch dashboard data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDashboardData();
+    }, []);
+
+    const handleMoodSelect = async (mood: string) => {
+        try {
+            await fetch('/api/daily-logs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mood }),
+            });
+            fetchDashboardData(); // Refresh to show updated mood
+        } catch (error) {
+            console.error('Failed to update mood:', error);
+        }
+    };
 
     const completionRings = [
-        { label: t('prayerProgress'), current: 3, total: 5, color: '#C9974A' },
-        { label: t('quranProgress'), current: 4, total: 10, color: '#2ECFC4' },
-        { label: t('dhikrProgress'), current: 66, total: 99, color: '#F4A830' },
+        {
+            label: t('prayerProgress'),
+            current: data?.prayers?.completed || 0,
+            total: data?.prayers?.total || 5,
+            color: 'var(--accent-gold)'
+        },
+        {
+            label: t('quranProgress'),
+            current: data?.quran?.completed || 0,
+            total: data?.quran?.total || 30,
+            color: 'var(--accent-teal)'
+        },
+        {
+            label: t('dhikrProgress'),
+            current: data?.dhikr?.completed || 0,
+            total: data?.dhikr?.total || 99,
+            color: 'var(--accent-amber)'
+        },
     ];
+
+    if (loading && !data) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <p className="text-text-muted">{t('loading')}...</p>
+            </div>
+        );
+    }
 
     return (
         <PageTransition>
-            <div className="max-w-2xl mx-auto p-6 w-full h-full min-h-screen">
+            <div className="max-w-7xl mx-auto p-4 md:p-8 w-full min-h-screen">
                 {/* Header */}
-                <div className="mb-8 pt-4">
-                    <h1 className="font-display text-3xl md:text-5xl font-bold text-text-primary mb-2">
+                <div className="mb-10 text-center md:text-left">
+                    <h1 className="font-display text-4xl md:text-6xl font-bold text-text-primary mb-2">
                         {t('greeting')} 👋
                     </h1>
-                    <p className="text-text-muted text-sm md:text-lg">
-                        Day {new Date().getDate()} of Ramadan
+                    <p className="text-text-muted text-lg md:text-xl">
+                        Day {data?.ramadanDay || 3} of Ramadan
                     </p>
                 </div>
 
-                <div className="space-y-8">
-                    {/* 3D Crescent Hero + Hijri Date */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <GlassCard elevated hover={false}>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left Column: Vision & Identity */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <GlassCard elevated hover={false} className="aspect-square flex items-center justify-center p-0 overflow-hidden">
                             <CrescentMoon3D />
                         </GlassCard>
-                        <GlassCard elevated hover={false}>
-                            <HijriDate />
+                        <GlassCard elevated hover={false} className="py-8">
+                            <HijriDate ramadanDay={data?.ramadanDay || 3} />
                         </GlassCard>
                     </div>
 
-                    {/* Countdown Timers */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <GlassCard elevated hover={false}>
-                            <CountdownRing
-                                targetTime={getSuhoorTime()}
-                                label={t('suhoor')}
-                                color="var(--accent-teal)"
-                                size={140}
-                            />
+                    {/* Middle Column: Focus & Progress */}
+                    <div className="lg:col-span-4 space-y-6">
+                        {/* Countdown Timers */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <GlassCard elevated hover={false} className="p-4 flex flex-col items-center">
+                                <CountdownRing
+                                    targetTime={getSuhoorTime()}
+                                    label={t('suhoor')}
+                                    color="var(--accent-teal)"
+                                    size={100}
+                                />
+                            </GlassCard>
+                            <GlassCard elevated hover={false} className="p-4 flex flex-col items-center">
+                                <CountdownRing
+                                    targetTime={getIftarTime()}
+                                    label={t('iftar')}
+                                    color="var(--accent-gold)"
+                                    size={100}
+                                />
+                            </GlassCard>
+                        </div>
+
+                        {/* Completion Rings */}
+                        <GlassCard elevated hover={false} className="h-full flex items-center">
+                            <CompletionRings rings={completionRings} />
                         </GlassCard>
+
+                        {/* Mood Logger */}
                         <GlassCard elevated hover={false}>
-                            <CountdownRing
-                                targetTime={getIftarTime()}
-                                label={t('iftar')}
-                                color="var(--accent-gold)"
-                                size={140}
+                            <MoodLogger
+                                onSelect={handleMoodSelect}
                             />
                         </GlassCard>
                     </div>
 
-                    {/* Completion Rings */}
-                    <GlassCard elevated hover={false}>
-                        <CompletionRings rings={completionRings} />
-                    </GlassCard>
+                    {/* Right Column: Consistency & Actions */}
+                    <div className="lg:col-span-4 space-y-6">
+                        {/* Weekly Streak */}
+                        <GlassCard elevated hover={false} className="h-full">
+                            <div className="flex flex-col h-full">
+                                <p className="text-text-muted mb-6 text-sm font-semibold uppercase tracking-widest">
+                                    {t('weeklyStreak')}
+                                </p>
+                                <div className="flex-1 flex items-center justify-center">
+                                    <StreakHeatmap data={demoStreakData} />
+                                </div>
+                            </div>
+                        </GlassCard>
 
-                    {/* Mood Logger */}
-                    <GlassCard elevated hover={false}>
-                        <MoodLogger
-                            onSelect={(mood: string) => console.log('Mood:', mood)}
-                        />
-                    </GlassCard>
-
-                    {/* Weekly Streak */}
-                    <GlassCard elevated hover={false}>
-                        <p
-                            className="text-text-muted mb-4 text-sm md:text-base font-semibold uppercase tracking-wider"
-                        >
-                            {t('weeklyStreak')}
-                        </p>
-                        <StreakHeatmap data={demoStreakData} />
-                    </GlassCard>
+                        {/* Today's Insights - Decorative or for later expansion */}
+                        <GlassCard elevated={false} className="bg-primary-900/10 border-primary-500/20">
+                            <p className="text-primary-400 text-sm italic text-center">
+                                "The best of you are those who learn the Quran and teach it."
+                            </p>
+                        </GlassCard>
+                    </div>
                 </div>
 
                 {/* Quick Add FAB */}

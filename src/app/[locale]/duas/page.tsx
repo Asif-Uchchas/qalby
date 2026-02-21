@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlassCard from '@/components/GlassCard';
@@ -94,16 +94,26 @@ const duasData: Dua[] = [
 
 const categoryKeys = ['morning', 'evening', 'afterPrayer', 'fasting', 'breakingFast', 'nightPrayer', 'general'] as const;
 
+const dhikrTypes = [
+    { key: 'subhanallah', arabic: 'سُبْحَانَ اللّٰهِ' },
+    { key: 'alhamdulillah', arabic: 'اَلْحَمْدُ لِلّٰهِ' },
+    { key: 'allahuakbar', arabic: 'اَللّٰهُ أَكْبَرُ' },
+];
+
 function DuaCard({
     dua,
     locale,
     isFavorite,
+    isSelected,
     onToggleFavorite,
+    onSelect,
 }: {
     dua: Dua;
     locale: string;
     isFavorite: boolean;
+    isSelected: boolean;
     onToggleFavorite: () => void;
+    onSelect: () => void;
 }) {
     const translation = locale === 'bn' ? dua.translation_bn : dua.translation_en;
 
@@ -113,8 +123,13 @@ function DuaCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             layout
+            onClick={onSelect}
+            className="cursor-pointer"
         >
-            <GlassCard hover={false}>
+            <GlassCard
+                hover={true}
+                className={isSelected ? 'ring-2 ring-primary-500 ring-offset-2 ring-offset-transparent' : ''}
+            >
                 {/* Arabic */}
                 <p
                     className="font-display"
@@ -204,19 +219,78 @@ function DuaCard({
     );
 }
 
-function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) {
+function DhikrCounter({
+    t,
+    activeDuaId,
+    onClearSelection
+}: {
+    t: ReturnType<typeof useTranslations<'duas'>>,
+    activeDuaId: string | null,
+    onClearSelection: () => void
+}) {
     const [count, setCount] = useState(0);
-    const [target] = useState(33);
-    const dhikrTypes = [
-        { key: 'subhanallah', arabic: 'سُبْحَانَ اللّٰهِ' },
-        { key: 'alhamdulillah', arabic: 'اَلْحَمْدُ لِلّٰهِ' },
-        { key: 'allahuakbar', arabic: 'اَللّٰهُ أَكْبَرُ' },
-    ];
-    const [activeType, setActiveType] = useState(0);
+    const [target, setTarget] = useState(33);
+    const [activeTypeIndex, setActiveTypeIndex] = useState(0);
 
-    const increment = () => {
-        if (count < target) {
-            setCount((c) => c + 1);
+    // If activeDuaId is null, we are in "Tasbih" mode using dhikrTypes
+    // If activeDuaId is present, we are in "Selected Dua" mode
+    const currentType = activeDuaId ?? dhikrTypes[activeTypeIndex].key;
+    const currentArabic = activeDuaId
+        ? (duasData.find(d => d.id === activeDuaId)?.arabic.substring(0, 15) + '...')
+        : dhikrTypes[activeTypeIndex].arabic;
+
+    const fetchDhikr = useCallback(async () => {
+        try {
+            const res = await fetch(`/api/dhikr?type=${currentType}`);
+            if (res.ok) {
+                const session = await res.json();
+                // API returns array or single object depending on if type is specified
+                const data = Array.isArray(session)
+                    ? session.find((s: any) => s.type === currentType)
+                    : session;
+
+                if (data) {
+                    setCount(data.count);
+                    setTarget(data.target);
+                } else {
+                    setCount(0);
+                    setTarget(33);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch dhikr:', error);
+        }
+    }, [currentType]);
+
+    useEffect(() => {
+        fetchDhikr();
+    }, [fetchDhikr]);
+
+    const increment = async () => {
+        const newCount = count + 1;
+        setCount(newCount);
+
+        try {
+            await fetch('/api/dhikr', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: currentType, count: newCount, target }),
+            });
+        } catch (error) {
+            console.error('Failed to update dhikr:', error);
+        }
+    };
+
+    const reset = async () => {
+        setCount(0);
+        try {
+            await fetch('/api/dhikr', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: currentType, count: 0, target }),
+            });
+        } catch (error) {
+            console.error('Failed to reset dhikr:', error);
         }
     };
 
@@ -224,57 +298,59 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
 
     return (
         <GlassCard elevated hover={false}>
-            <p
-                style={{
-                    fontSize: '0.85rem',
-                    color: 'var(--text-muted)',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    marginBottom: '12px',
-                    textAlign: 'center',
-                }}
-            >
-                {t('dhikrCounter')}
-            </p>
-
-            {/* Type Selector */}
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    marginBottom: '16px',
-                }}
-            >
-                {dhikrTypes.map((type, i) => (
-                    <motion.button
-                        key={type.key}
-                        onClick={() => { setActiveType(i); setCount(0); }}
-                        whileTap={{ scale: 0.95 }}
-                        style={{
-                            padding: '6px 14px',
-                            borderRadius: 'var(--radius-full)',
-                            border: activeType === i
-                                ? '1px solid var(--primary-500)'
-                                : '1px solid var(--glass-border)',
-                            background: activeType === i ? 'var(--glow-primary)' : 'transparent',
-                            color: activeType === i ? 'var(--primary-400)' : 'var(--text-muted)',
-                            cursor: 'pointer',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                        }}
+            <div className="flex justify-between items-center mb-4">
+                <p className="text-xs font-semibold text-text-muted uppercase tracking-widest">
+                    {activeDuaId ? t('selectedDuaCounter') : t('dhikrCounter')}
+                </p>
+                {activeDuaId && (
+                    <button
+                        onClick={onClearSelection}
+                        className="text-[10px] bg-primary-500/10 text-primary-400 px-2 py-1 rounded-full border border-primary-500/20 hover:bg-primary-500/20 transition-colors"
                     >
-                        {t(type.key as 'subhanallah' | 'alhamdulillah' | 'allahuakbar')}
-                    </motion.button>
-                ))}
+                        Back to Tasbih
+                    </button>
+                )}
             </div>
+
+            {/* Type Selector (Only in Tasbih mode) */}
+            {!activeDuaId && (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '8px',
+                        marginBottom: '16px',
+                    }}
+                >
+                    {dhikrTypes.map((type, i) => (
+                        <motion.button
+                            key={type.key}
+                            onClick={() => setActiveTypeIndex(i)}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                                padding: '6px 14px',
+                                borderRadius: 'var(--radius-full)',
+                                border: activeTypeIndex === i
+                                    ? '1px solid var(--primary-500)'
+                                    : '1px solid var(--glass-border)',
+                                background: activeTypeIndex === i ? 'var(--glow-primary)' : 'transparent',
+                                color: activeTypeIndex === i ? 'var(--primary-400)' : 'var(--text-muted)',
+                                cursor: 'pointer',
+                                fontSize: '0.75rem',
+                                fontWeight: 600,
+                            }}
+                        >
+                            {t(type.key as 'subhanallah' | 'alhamdulillah' | 'allahuakbar')}
+                        </motion.button>
+                    ))}
+                </div>
+            )}
 
             {/* Counter Button */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                 <motion.button
                     onClick={increment}
-                    whileTap={{ scale: 0.9, boxShadow: '0 0 0 rgba(201,151,74,0)' }}
+                    whileTap={{ scale: 0.9 }}
                     whileHover={{ scale: 1.05 }}
                     style={{
                         width: '140px',
@@ -288,7 +364,7 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '4px',
-                        boxShadow: '0 0 30px var(--glow-primary), 0 0 60px rgba(139, 92, 246, 0.1)',
+                        boxShadow: '0 0 30px var(--glow-primary), 0 0 60px rgba(16, 185, 129, 0.1)',
                         position: 'relative',
                         overflow: 'hidden',
                     }}
@@ -316,13 +392,15 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                         className="font-display"
                         dir="rtl"
                         style={{
-                            fontSize: '1rem',
+                            fontSize: activeDuaId ? '0.8rem' : '1rem',
                             color: 'var(--primary-400)',
                             position: 'relative',
                             zIndex: 1,
+                            textAlign: 'center',
+                            padding: '0 10px'
                         }}
                     >
-                        {dhikrTypes[activeType].arabic}
+                        {currentArabic}
                     </span>
                     <span
                         className="font-mono"
@@ -343,7 +421,7 @@ function DhikrCounter({ t }: { t: ReturnType<typeof useTranslations<'duas'>> }) 
                         {t('target')}: {target}
                     </span>
                     <motion.button
-                        onClick={() => setCount(0)}
+                        onClick={reset}
                         whileTap={{ scale: 0.8 }}
                         style={{
                             background: 'none',
@@ -373,14 +451,43 @@ export default function DuasPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
     const [favorites, setFavorites] = useState<Set<string>>(new Set());
+    const [activeDuaId, setActiveDuaId] = useState<string | null>(null);
 
-    const toggleFavorite = useCallback((id: string) => {
+    const fetchFavorites = async () => {
+        try {
+            const res = await fetch('/api/duas/favorites');
+            if (res.ok) {
+                const data = await res.json();
+                setFavorites(new Set(data));
+            }
+        } catch (error) {
+            console.error('Failed to fetch favorites:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
+
+    const toggleFavorite = useCallback(async (id: string) => {
+        // Optimistic update
         setFavorites((prev) => {
             const next = new Set(prev);
             if (next.has(id)) next.delete(id);
             else next.add(id);
             return next;
         });
+
+        try {
+            await fetch('/api/duas/favorites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ duaId: id }),
+            });
+        } catch (error) {
+            console.error('Failed to toggle favorite:', error);
+            fetchFavorites(); // Rollback
+        }
     }, []);
 
     const filteredDuas = duasData.filter((dua) => {
@@ -531,7 +638,11 @@ export default function DuasPage() {
 
                     {/* Dhikr Counter */}
                     <motion.div variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}>
-                        <DhikrCounter t={t} />
+                        <DhikrCounter
+                            t={t}
+                            activeDuaId={activeDuaId}
+                            onClearSelection={() => setActiveDuaId(null)}
+                        />
                     </motion.div>
 
                     {/* Dua Cards */}
@@ -542,7 +653,9 @@ export default function DuasPage() {
                                 dua={dua}
                                 locale={locale}
                                 isFavorite={favorites.has(dua.id)}
+                                isSelected={activeDuaId === dua.id}
                                 onToggleFavorite={() => toggleFavorite(dua.id)}
+                                onSelect={() => setActiveDuaId(dua.id)}
                             />
                         ))}
                     </AnimatePresence>
