@@ -160,8 +160,8 @@ export default function LoginPage() {
                                 </motion.p>
                             </div>
 
-                            <div className="px-6 sm:px-8 pb-8 pt-2">
-                                <form onSubmit={handleCredentialsSignIn} className="space-y-5">
+                            <div className="px-6 sm:px-8 pb-8 pt-4">
+                                <form onSubmit={handleCredentialsSignIn} className="space-y-6">
                                     <motion.div
                                         initial={{ x: -15, opacity: 0 }}
                                         animate={{ x: 0, opacity: 1 }}
@@ -182,7 +182,7 @@ export default function LoginPage() {
                                                 placeholder="your@email.com"
                                                 required
                                                 autoComplete="email"
-                                                className="w-full bg-[#030806]/60 border border-white/8 rounded-xl py-3.5 pl-11 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all font-medium placeholder:text-text-muted/30 text-sm"
+                                                className="w-full bg-[#030806]/60 border border-white/8 rounded-xl py-4 pl-12 pr-4 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all font-medium placeholder:text-text-muted/30 text-sm"
                                             />
                                         </div>
                                     </motion.div>
@@ -207,7 +207,7 @@ export default function LoginPage() {
                                                 placeholder="••••••••"
                                                 required
                                                 autoComplete="current-password"
-                                                className="w-full bg-[#030806]/60 border border-white/8 rounded-xl py-3.5 pl-11 pr-12 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all font-medium placeholder:text-text-muted/30 text-sm"
+                                                className="w-full bg-[#030806]/60 border border-white/8 rounded-xl py-4 pl-12 pr-12 text-text-primary focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all font-medium placeholder:text-text-muted/30 text-sm"
                                             />
                                             <button
                                                 type="button"
@@ -262,12 +262,12 @@ export default function LoginPage() {
                                     </motion.button>
                                 </form>
 
-                                <div className="mt-6 relative">
+                                <div className="mt-10 mb-8 relative">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-white/6" />
                                     </div>
                                     <div className="relative flex justify-center">
-                                        <span className="bg-[#0a1512] px-4 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/50 border border-white/5 rounded-full">
+                                        <span className="bg-[#0a1512] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted/50 border border-white/5 rounded-full">
                                             Or continue with
                                         </span>
                                     </div>
@@ -293,7 +293,7 @@ export default function LoginPage() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: 1 }}
-                                    className="mt-7 text-center"
+                                    className="mt-10 text-center"
                                 >
                                     <span className="text-text-secondary text-sm font-medium">{t('noAccount')} </span>
                                     <Link
